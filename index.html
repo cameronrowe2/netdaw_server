@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <title>Title</title>
+    <script src="jquery.min.js"></script>
+    <script>
+    $(document).ready(function(){
+      // add contacts
+
+      function showContacts(){
+        $.ajax({
+          url: "/show",
+          type: "get",
+          success: function(data){
+            console.log(data)
+
+            var html = ''
+
+            data.forEach(function(v){
+              html += "<div id='"+v._id+"''>"
+              html += "<span>"+v.name+"</span> - "
+              html += "<span>"+v.phone+"</span> - "
+              html += "<span>"+v.email+"</span> "
+              html += "<span style='cursor: pointer' id='deleteContact'>X</span>"
+              html += "</div>"
+            })
+
+            $('#contacts').html(html)
+          }
+        })
+      }
+
+      $('#deleteContact').on('click', function(){
+        console.log('delete')
+      })
+
+      showContacts()
+
+      // submit new contact
+      $('#add').on('click', function(){
+        var name = $('#name').val();
+        var phone = $('#phone').val();
+        var email = $('#email').val();
+        console.log(name)
+        console.log(phone)
+        console.log(email)
+
+        $.ajax({
+          url: "/add",
+          data: {
+            name: name,
+            phone: phone,
+            email: email
+          },
+          type: "get",
+          success: function(data){
+            console.log(data)
+            showContacts()
+          }
+        })
+      })
+    });
+    </script>
+  </head>
+  <body>
+    <h1>Hello World</h1>
+    <input id="name"></input>
+    <input id="phone"></input>
+    <input id="email"></input>
+    <button id="add">Button</button>
+    <div id="contacts">
+    </div>
+  </body>
+</html>
